@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- App Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#EAEAEA"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <!-- Hamburger Menu Icon -->
+        <ImageButton
+            android:id="@+id/btn_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/dropdown" />
+
+        <!-- Settings Button -->
+        <ImageButton
+            android:id="@+id/btn_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/settings" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <!-- Inventory Header -->
+    <LinearLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Header Text -->
+        <TextView
+            android:id="@+id/textView_inventory"
+            android:layout_width="248dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Inventory"
+            android:textAlignment="viewEnd"
+            android:textSize="24sp" />
+
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/imageView_icon"
+            android:layout_width="62dp"
+            android:layout_height="59dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/pencil"
+            android:textAlignment="viewStart" />
+
+    </LinearLayout>
+
+    <!-- Linear Layout for Grid and Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_container"
+        android:orientation="horizontal">
+
+        <!-- Grid Layout for Panels -->
+
+        <!-- Bottom Right Toolbar -->
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+
+            <GridLayout
+                android:id="@+id/gridLayout_panels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:orientation="horizontal"
+                android:rowCount="2">
+                <include layout="@layout/panel_layout"/>
+                <include layout="@layout/panel_layout"/>
+
+            </GridLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/bottom_right_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <!-- Button 1 -->
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"/>
+
+            <!-- Button 2 -->
+            <ImageButton
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/history"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"/>
+
+            <!-- Button 3 -->
+            <ImageButton
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clock"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/button1"/>
+
+            <!-- Button 4 -->
+            <ImageButton
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/add"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/button2"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- Search Bar -->
+    <RelativeLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/editText_search"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/white"
+            android:hint="Search"
+            android:paddingStart="18dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
