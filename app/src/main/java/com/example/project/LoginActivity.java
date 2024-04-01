@@ -66,10 +66,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check user credentials in the database
         if (validateUser(email, password)) {
+            long userId = dbHelper.getUserId(email, password);
             // Login successful, navigate to the next activity
             Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
             // Navigate to the next activity
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startMainActivity(userId);
             finish(); // Finish the LoginActivity so that pressing back button won't come back to it
         } else {
             // Login failed, display error message
@@ -84,5 +85,12 @@ public class LoginActivity extends AppCompatActivity {
         boolean isValid = cursor.moveToFirst();
         cursor.close();
         return isValid;
+    }
+
+    private void startMainActivity(long userId) {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("userId", userId); // Pass userId to MainActivity
+        startActivity(intent);
+        finish(); // Finish the LoginActivity so that pressing back button won't come back to it
     }
 }

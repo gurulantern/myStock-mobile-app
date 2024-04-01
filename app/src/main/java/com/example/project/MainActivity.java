@@ -26,6 +26,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private InventoryDatabaseHelper dbHelper;
     private ImageButton buttonAddItem;
+    private long userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize button
         buttonAddItem = findViewById(R.id.button4);
+
+        // Get userId from Intent
+        userId = getIntent().getLongExtra("userId", -1); // -1 is default value if userId not found
 
 
         // Set click listener for the Add Item button

@@ -21,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText editTextName, editTextEmail, editTextPassword, editTextConfirmPassword;
     private Button buttonRegister;
     private InventoryDatabaseHelper dbHelper;
+    private long userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // Insert user into the database
-        long result = dbHelper.insertUser(name, email, password);
-        if (result != -1) {
+        userId = dbHelper.registerUserDB(name, email, password);
+        if (userId != -1) {
             // Registration successful
             requestPermissions();
             Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
@@ -93,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                 // READ_PHONE_NUMBERS permission already granted
                 Toast.makeText(this, "Phone Number Permission already granted", Toast.LENGTH_SHORT).show();
                 // Both permissions granted, start the MainActivity
-                startMainActivity();
+                startMainActivity(userId);
             }
         }
     }
@@ -115,30 +116,31 @@ public class RegisterActivity extends AppCompatActivity {
                             PERMISSION_REQUEST_READ_PHONE_NUMBERS);
                 } else {
                     // Both permissions granted, start the MainActivity
-                    startMainActivity();
+                    startMainActivity(userId);
                 }
             } else {
                 // SMS permission denied
                 Toast.makeText(this, "SMS Permission denied", Toast.LENGTH_SHORT).show();
-                startMainActivity();
+                startMainActivity(userId);
             }
         } else if (requestCode == PERMISSION_REQUEST_READ_PHONE_NUMBERS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // READ_PHONE_NUMBERS permission granted
                 Toast.makeText(this, "Phone Number Permission granted", Toast.LENGTH_SHORT).show();
                 // Both permissions granted, start the MainActivity
-                startMainActivity();
+                startMainActivity(userId);
             } else {
                 // READ_PHONE_NUMBERS permission denied
                 Toast.makeText(this, "Phone Number Permission denied", Toast.LENGTH_SHORT).show();
-                startMainActivity();
+                startMainActivity(userId);
             }
         }
     }
 
-
-    private void startMainActivity() {
+    // Pass userId for usage in the Main Activity
+    private void startMainActivity(long userId) {
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+        intent.putExtra("userId", userId);
         startActivity(intent);
         finish();
     }
