@@ -1,5 +1,14 @@
 package com.example.project;
 
+/*
+Name: RegisterActivity.java
+Version: 2.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the Register Activity for new users.
+Requests permission to send text alerts when an item's quantity reaches zero
+ */
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,6 +25,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity {
+    // Declaration of elements and variables needed in activity
     private static final int PERMISSION_REQUEST_SMS = 0;
     private static final int PERMISSION_REQUEST_READ_PHONE_NUMBERS = 456;
     private EditText editTextName, editTextEmail, editTextPassword, editTextConfirmPassword;
@@ -26,6 +36,8 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Use activity_register.xml
         setContentView(R.layout.activity_register);
 
         // Initialize database helper
@@ -48,7 +60,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Register user function.
+     * Grabs strings from text views, validates them and calls dbHelper's registerDb method
+     */
     private void registerUser() {
+        // Store the strings from the text views and trim whitespace
         String name = editTextName.getText().toString().trim();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -68,6 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Insert user into the database
         userId = dbHelper.registerUserDB(name, email, password);
+
+        // Userid is -1 registration didn't work
         if (userId != -1) {
             // Registration successful
             Log.d("User Registered", name);
@@ -80,6 +99,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Requests permissions for SMS notifications and phone numbers for texting
+     */
     private void requestPermissions() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             // Request SMS permission
@@ -100,6 +122,15 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Logic for when the permission is allowed or not. Starts main activity in all cases
+     * @param requestCode The request code passed in
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -138,11 +169,15 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    // Pass userId for usage in the Main Activity
+    /**
+     * Starts main activity when successfully registered
+     * @param userId id of user
+     */
     private void startMainActivity(long userId) {
+        // Declare intent
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-        intent.putExtra("userId", userId);
-        startActivity(intent);
+        intent.putExtra("userId", userId); // store userId for intent
+        startActivity(intent); // Start activity with intent
         finish();
     }
 }

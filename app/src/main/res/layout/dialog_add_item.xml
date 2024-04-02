@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+Name: dialog_add_item.xml
+Version: 1.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the dialog layout to add an item to the user's inventory table
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+Name: history_item_layout.xml
+Version: 1.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the layout for a history item when added to the activity_history
+recycler view
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,6 +20,7 @@
         android:layout_height="1dp"
         android:background="@color/black" />
 
+    <!-- User's name -->
     <TextView
         android:id="@+id/user_text"
         android:layout_width="wrap_content"
@@ -22,6 +31,7 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Action string based on action type -->
     <TextView
         android:id="@+id/action_text"
         android:layout_width="wrap_content"
@@ -31,6 +41,7 @@
         android:text="action"
         android:textSize="16sp" />
 
+    <!-- Timestamp "yyyy-MM-dd HH:mm:ss" -->
     <TextView
         android:id="@+id/timestamp_text"
         android:layout_width="wrap_content"

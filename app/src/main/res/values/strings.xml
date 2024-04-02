@@ -1,3 +1,10 @@
+<!--
+Name: strings.xml
+Version: 1.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the strings to be used in app
+-->
 <resources>
     <string name="app_name">Inventory</string>
     <string name="title_activity_login">LoginActivity</string>

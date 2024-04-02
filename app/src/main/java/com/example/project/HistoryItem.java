@@ -60,7 +60,7 @@ public class HistoryItem {
 
     /**
      * Getter for the timestamp
-     * @return timestamp string
+     * @return timestamp string "yyyy-MM-dd HH:mm:ss"
      */
     public String getTimestamp() {
         return timestamp;

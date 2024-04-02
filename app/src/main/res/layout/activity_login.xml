@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+Name: activity_login.xml
+Version: 1.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the layout for login activity for user to login or start register activity
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,14 +14,13 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <!-- Logo Container -->
-
     <!-- Login Container -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Logo -->
         <ImageView
             android:id="@+id/imageViewLogo"
             android:layout_width="200dp"

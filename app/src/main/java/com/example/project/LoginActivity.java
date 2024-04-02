@@ -1,5 +1,14 @@
 package com.example.project;
 
+/*
+Name: LoginActivity.java
+Version: 2.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the Login activity to validate a user's email and password.
+Passes intent with userId for table lookup in main activity
+ */
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +24,7 @@ import android.widget.Toast;
 
 
 public class LoginActivity extends AppCompatActivity {
+    // Declarations of elements for activity
     private EditText editTextEmail, editTextPassword;
     private TextView textViewInvalidLogin;
     private Button buttonSubmit, buttonRegister;
@@ -23,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Use activity_login.xml for view
         setContentView(R.layout.activity_login);
 
         // Initialize database helper
@@ -54,6 +66,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Login function validates if fields are empty
+     * Validates inputs and gets userId for intent
+     */
     private void login() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -78,6 +94,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Function to query database and validate the user input
+     * @param email user input email
+     * @param password user input password
+     * @return True if valid, False if invalid
+     */
     private boolean validateUser(String email, String password) {
         // Perform database query to validate user credentials
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -87,10 +109,14 @@ public class LoginActivity extends AppCompatActivity {
         return isValid;
     }
 
+    /**
+     * Starts main activity passing userId so inventory table can be found
+     * @param userId id of user
+     */
     private void startMainActivity(long userId) {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("userId", userId); // Pass userId to MainActivity
-        startActivity(intent);
+        startActivity(intent); // start main activity
         finish(); // Finish the LoginActivity so that pressing back button won't come back to it
     }
 }

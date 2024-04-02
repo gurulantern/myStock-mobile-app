@@ -1,5 +1,16 @@
 package com.example.project;
 
+/*
+Name: MainActivity.java
+Version: 2.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the Main activity where users can view their inventory grid.
+From here they can add, delete, rename, and change quantities for items.
+They can also access the history activity where they can view a list of actions taken.
+They can also access the data activity where they can view a pie chart of their inventory
+ */
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -25,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    // Declare elements for use in activity
     private InventoryDatabaseHelper dbHelper;
     private ImageButton buttonAddItem;
     private ImageButton buttonHistory;
@@ -61,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Set Click listener for History activity
         buttonHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Set Click listener for Data activity
         buttonData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,11 +95,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Populate the grid of items
         populatePanelsFromDatabase();
     }
 
-    // Method to show dialog for adding a new item
+    /**
+     * Function to show the add item dialog.
+     * User can add name and initial quantity.
+     */
     private void showAddItemDialog() {
+        // Declare builder for the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Item");
 
@@ -141,6 +160,10 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    /**
+     * Function to populate the panels for each item in the grid based on items in
+     * user's inventory table
+     */
     private void populatePanelsFromDatabase() {
         int position=0;
         // Get a reference to the GridLayout where panels will be added
@@ -185,6 +208,13 @@ public class MainActivity extends AppCompatActivity {
         dbHelper.close();
     }
 
+    /**
+     * Adds a panel to the grid layout using panel_layout.xml
+     * @param gridLayout Reference to the grid layout
+     * @param itemName name of item
+     * @param quantity quantity of item
+     * @param position position of panel in grid
+     */
     private void addPanelToGridLayout(GridLayout gridLayout, String itemName, int quantity, int position) {
         // Inflate the panel layout
         View panelView = LayoutInflater.from(this).inflate(R.layout.panel_layout, gridLayout, false);
@@ -195,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         textViewName.setText(itemName);
         textViewQuantity.setText(String.valueOf(quantity));
 
-        // Set background color based on position
+        // Set background color based on position modulo
         int colorResId;
         switch (position % 3) {
             case 0:
@@ -226,7 +256,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Function to show the edit options dialog
+     * @param itemName name of item passed to rename dialog
+     * @param quantity quantity of item passed to quantity dialog
+     */
     private void showEditOptionsDialog(final String itemName, final int quantity) {
+        // Declare builder for the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edit Options");
 
@@ -238,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (which) {
                     case 0:
                         // Edit Name
-                        showEditNameDialog(itemName, quantity);
+                        showEditNameDialog(itemName);
                         break;
                     case 1:
                         // Edit Quantity
@@ -256,7 +292,11 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    private void showEditNameDialog(final String itemName, final int quantity) {
+    /**
+     * Function to show edit name dialog
+     * @param itemName name of item
+     */
+    private void showEditNameDialog(final String itemName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edit Name");
 
@@ -287,6 +327,11 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    /**
+     * Edits the quantity of an item
+     * @param itemName name of an item
+     * @param quantity quantity of an item
+     */
     private void showEditQuantityDialog(final String itemName, final int quantity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edit Quantity");
@@ -324,7 +369,12 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    /**
+     * Deletes item from table and grid
+     * @param itemName name of item to be deleted
+     */
     private void deleteItem(final String itemName) {
+        // Builds dialog to confirm deletion
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirm Deletion");
         builder.setMessage("Are you sure you want to delete this item?");
@@ -350,6 +400,10 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    /**
+     * Sends SMS notification when an item's quantity reaches zero
+     * @param itemName name of item
+     */
     private void sendSMSNotification(String itemName) {
         // Check if both permissions are granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
