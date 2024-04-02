@@ -1,5 +1,13 @@
 package com.example.project;
 
+/*
+Name: HistoryItem.java
+Version: 1.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the History Item model for the adapter to use in the RecyclerView.
+ */
+
 import android.util.Log;
 
 public class HistoryItem {
@@ -10,8 +18,7 @@ public class HistoryItem {
     private String oldName;
     private String newName;
 
-    // You can add more fields as needed
-
+    // Constructor
     public HistoryItem(String action, String timestamp, String userName, int quantity, String oldName, String newName) {
         Log.d("Setting User Name", userName);
         this.action = action;
@@ -22,10 +29,10 @@ public class HistoryItem {
         this.newName = newName;
     }
 
-    public String getCurrentName() {
-        return oldName;
-    }
-
+    /**
+     * Switch statement checks the action field and returns a string that matches the action.
+     * @return String for the history item displayed int history recycler view
+     */
     public String getActionString() {
         switch (action) {
             case "rename":
@@ -51,12 +58,19 @@ public class HistoryItem {
         return action;
     }
 
+    /**
+     * Getter for the timestamp
+     * @return timestamp string
+     */
     public String getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Getter for the userName
+     * @return userName string
+     */
     public String getUserName() {
-        Log.d("History Getting User Name", userName);
         return userName;
     }
 }

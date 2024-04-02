@@ -1,32 +1,38 @@
 package com.example.project;
 
+/*
+Name: HistoryActivity.java
+Version: 1.0
+Author: Alex Ho
+Date: 2024-04-02
+Description: Defines the activity for the user to see a history of the actions taken upon their
+inventory table.
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
 
+    // Declarations for elements for Activity to use
     private InventoryDatabaseHelper dbHelper;
     private RecyclerView recyclerView;
     private HistoryAdapter adapter;
     private List<HistoryItem> historyItemList;
     private Button buttonBack;
-    private EditText searchEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Use activity_history.xml for layout view
         setContentView(R.layout.activity_history);
 
         // Initialize database helper
@@ -45,7 +51,7 @@ public class HistoryActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // Initialize back button
-        buttonBack = findViewById(R.id.buttonBack);
+        buttonBack = findViewById(R.id.buttonBackHistory);
 
         // Set click listener for register button
         buttonBack.setOnClickListener(new View.OnClickListener() {
@@ -54,45 +60,15 @@ public class HistoryActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        // Initialize search EditText
-        searchEditText = findViewById(R.id.searchEditText);
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                filterHistoryItems(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-
     }
 
+    /**
+     * Call dbHelper to query for all history items from the associated history table
+     * @param userId userId for query,
+     * @param inventoryTable inventoryTable name for query
+     * @return List of the history items for rendering
+     */
     private List<HistoryItem> queryHistoryItems(long userId, String inventoryTable) {
         return dbHelper.queryHistoryItems(userId, inventoryTable);
-    }
-
-    private void filterHistoryItems(String query) {
-        List<HistoryItem> filteredList = new ArrayList<>();
-        for (HistoryItem item : historyItemList) {
-            if (item.getCurrentName().toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(item);
-            }
-        }
-        adapter.setItems(filteredList);
-    }
-
-    // This method is just for demonstration, you should replace it with your actual data loading logic
-    private List<HistoryItem> loadHistoryItems() {
-        List<HistoryItem> items = new ArrayList<>();
-        // Load your history items from wherever you get them
-        return items;
     }
 }

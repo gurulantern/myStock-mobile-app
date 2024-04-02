@@ -5,22 +5,13 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/buttonBack"
+        android:id="@+id/buttonBackHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_margin="16dp"
         android:text="Back" />
-
-    <EditText
-        android:id="@+id/searchEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search Items"
-        android:inputType="text"
-        android:imeOptions="actionDone"
-        android:layout_margin="16dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
