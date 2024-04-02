@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,7 +27,10 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private InventoryDatabaseHelper dbHelper;
     private ImageButton buttonAddItem;
+    private ImageButton buttonHistory;
+    private ImageButton buttonData;
     private long userId;
+    private String inventoryTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +40,17 @@ public class MainActivity extends AppCompatActivity {
         // Initialize database helper
         dbHelper = new InventoryDatabaseHelper(this);
 
-        // Initialize button
-        buttonAddItem = findViewById(R.id.button4);
+        // Initialize buttons
+        buttonAddItem = findViewById(R.id.addItem);
+        buttonHistory = findViewById(R.id.history);
+        buttonData = findViewById(R.id.data);
 
         // Get userId from Intent
         userId = getIntent().getLongExtra("userId", -1); // -1 is default value if userId not found
-
+        Log.d("Checking USER ID: ", String.valueOf(userId));
+        // Get inventory table name from userId
+        inventoryTable = dbHelper.getInventoryTableName(userId);
+        Log.d("Checking INVENTORY TABLE: ", inventoryTable);
 
         // Set click listener for the Add Item button
         buttonAddItem.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +58,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Display a dialog to enter item details
                 showAddItemDialog();
+            }
+        });
+
+        buttonHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                intent.putExtra("userId", userId); // Replace userId with the actual userId
+                intent.putExtra("inventoryTable", inventoryTable); // Replace inventoryTableName with the actual inventory table name
+                startActivity(intent);
+            }
+        });
+
+        buttonData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DataActivity.class);
+                intent.putExtra("userId", userId); // Replace userId with the actual userId
+                intent.putExtra("inventoryTable", inventoryTable); // Replace inventoryTableName with the actual inventory table name
+                startActivity(intent);
             }
         });
 
@@ -86,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 int quantity = Integer.parseInt(quantityStr);
 
                 // Insert item into database
-                long result = dbHelper.insertItem(name, quantity);
+                long result = dbHelper.insertItem(inventoryTable, name, quantity);
+                dbHelper.insertAddAction("history_" + inventoryTable,userId, name, quantity);
 
                 // Check if insertion was successful
                 if (result != -1) {
@@ -127,10 +157,9 @@ public class MainActivity extends AppCompatActivity {
                 InventoryDatabaseHelper.InventoryTable.COL_ITEM,
                 InventoryDatabaseHelper.InventoryTable.COL_QTY
         };
-
         // Query the database to retrieve all items
         Cursor cursor = db.query(
-                InventoryDatabaseHelper.InventoryTable.TABLE,
+                inventoryTable,
                 projection,
                 null,
                 null,
@@ -138,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null
         );
+        Log.d("Query Executed:", "Inventory Table has been queried");
 
         // Iterate over the cursor to populate panels
         while (cursor.moveToNext()) {
@@ -241,7 +271,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String newName = input.getText().toString().trim();
                 // Update name in the database
-                dbHelper.updateItemName(itemName, newName);
+                dbHelper.updateItemName(inventoryTable, itemName, newName);
+                dbHelper.insertRenameAction("history_" + inventoryTable, userId, itemName, newName);
                 populatePanelsFromDatabase();
             }
         });
@@ -272,8 +303,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 int newQuantity = Integer.parseInt(input.getText().toString().trim());
                 // Update quantity in the database
-                dbHelper.updateItemQuantity(itemName, newQuantity);
-
+                int oldQuantity = dbHelper.getItemQuantity(itemName, inventoryTable);
+                dbHelper.updateItemQuantity(inventoryTable, itemName, newQuantity);
+                dbHelper.insertChangeQuantityAction("history_" + inventoryTable, userId, itemName, newQuantity - oldQuantity);
                 if (newQuantity == 0) {
                     sendSMSNotification(itemName);
                 }
@@ -302,7 +334,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Delete item from the database
-                dbHelper.deleteItem(itemName);
+                dbHelper.deleteItem(inventoryTable, itemName);
+                dbHelper.insertDeleteAction("history_" + inventoryTable, userId, itemName);
                 populatePanelsFromDatabase();
             }
         });

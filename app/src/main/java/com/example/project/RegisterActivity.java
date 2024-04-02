@@ -70,6 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
         userId = dbHelper.registerUserDB(name, email, password);
         if (userId != -1) {
             // Registration successful
+            Log.d("User Registered", name);
             requestPermissions();
             Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
         } else {
